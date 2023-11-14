@@ -1,3 +1,9 @@
+/*
+ *	For: SFWE 301 
+ * 	Purpose: This Java class contains the generateFitRating method that takes
+ * 			 a student and a scholarship and determines how well they fit, i.e.
+ * 			 how many attributes the students and scholarships share.
+ */
 import java.util.HashMap;
 import java.util.Map;
 
