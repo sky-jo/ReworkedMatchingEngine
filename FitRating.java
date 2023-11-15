@@ -27,7 +27,6 @@ public class FitRating {
 		// if there is not priority attribute, each attribute has the same value
 		if (priorityAttribute.equals("none")) 
 			attributeValue = MAX_FIT_RATING / (float) scholarshipAttributes.size();
-		
 		// if there is a priority attribute, the priority attribute is worth 30 pts
 		// and all other attributes are worth the same
 		else 
@@ -51,18 +50,26 @@ public class FitRating {
 			
 			// if the scholarship does not specify a value for an attribute, 
 			// add points to the fit rating
-			if (scholarshipValue.equals("none")) {
+			if (scholarshipValue.equals("none"))
 				fitRating += toAdd;
-			}
 			
+			// if checking scholarships desired major, check the students major and minor for a match
+			if (scholarshipAttribute.equals("major")) {
+				// if the students major and minor match, add to the fit rating
+				if (scholarshipValue.equals(studentValue) ||
+					scholarshipValue.equals(studentAttributes.get("minor"))) {
+					fitRating += toAdd;
+				}
+			}
 			// if GPA, cast to float then compare
-			if (scholarshipAttribute.equals("GPA")) {
+			else if (scholarshipAttribute.equals("GPA")) {
 				float scholarshipGPA = Float.parseFloat(scholarshipValue);
 				float studentGPA = Float.parseFloat(studentValue);
 				if (studentGPA >= scholarshipGPA) {
 					fitRating += toAdd;
 				}
 			}
+			// only add to the fit rating if attributes match
 			else if (studentValue.equals(scholarshipValue)) {
 				fitRating += toAdd;
 			}
