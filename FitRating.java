@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class FitRating {
 	final private static float MAX_FIT_RATING = (float) 100.0;
+	final private static float PRIORITY_ATTRIBUTE_VALUE = (float) 30.0;
 	
 	/**
 	 * @param student of type Student with attributes
@@ -30,7 +31,7 @@ public class FitRating {
 		// if there is a priority attribute, the priority attribute is worth 30 pts
 		// and all other attributes are worth the same
 		else 
-			attributeValue = (float) (MAX_FIT_RATING - 30.0) / (float) scholarshipAttributes.size();
+			attributeValue = (float) (MAX_FIT_RATING - PRIORITY_ATTRIBUTE_VALUE) / (float) scholarshipAttributes.size();
 		
 		
 		float fitRating = 0;
@@ -42,12 +43,11 @@ public class FitRating {
 			String studentValue = studentAttributes.get(scholarshipAttribute);
 			
 			// check for priority attribute and set toAdd appropriately
-			if (scholarshipAttribute.equals(priorityAttribute)) {
-				toAdd = (float) 30;
-			}			
-			else {
+			if (scholarshipAttribute.equals(priorityAttribute)) 
+				toAdd = PRIORITY_ATTRIBUTE_VALUE;				
+			else 
 				toAdd = attributeValue;
-			}
+			
 			
 			// if the scholarship does not specify a value for an attribute, 
 			// add points to the fit rating
