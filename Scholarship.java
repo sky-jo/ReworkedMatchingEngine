@@ -21,8 +21,8 @@ public class Scholarship {
      * @param scholarshipDueDate due date of the scholarship in the form MM/DD/YYYY    
      * @param scholarshipPriorityAttribute the priority attribute of the scholarship.
      * @param scholarshipAmount the value of the scholarship in dollars.
-     * @param scholarshipAttributes info about the scholarship (indices - attribute: 0 - major, 1 - minor, 2 - graduation year, 3 - GPA, 4 - year of study, 
-     * 															5 - transfer student, 6 - units enrolled, 7 - gender, 8 - race)
+     * @param scholarshipAttributes info about the scholarship (indices - attribute: 0 - major/minor, 1 - graduation year, 2 - GPA, 3 - year of study, 
+     * 															4 - transfer student, 5 - units enrolled, 6 - gender, 7 - race)
      */
     public Scholarship(String scholarshipName,  String scholarshipOpenDate, 
     			       String scholarshipDueDate, String scholarshipPriorityAttribute,
@@ -34,14 +34,13 @@ public class Scholarship {
     	amount = scholarshipAmount;
     	
     	attributes.put("major", scholarshipAttributes[0]);
-    	attributes.put("minor", scholarshipAttributes[1]);
-    	attributes.put("graduation year", scholarshipAttributes[2]);
-    	attributes.put("GPA", scholarshipAttributes[3]);
-    	attributes.put("year of study", scholarshipAttributes[4]);
-    	attributes.put("transfer student", scholarshipAttributes[5]);
-    	attributes.put("units enrolled", scholarshipAttributes[6]);
-    	attributes.put("gender", scholarshipAttributes[7]);
-    	attributes.put("race", scholarshipAttributes[8]);
+    	attributes.put("graduation year", scholarshipAttributes[1]);
+    	attributes.put("GPA", scholarshipAttributes[2]);
+    	attributes.put("year of study", scholarshipAttributes[3]);
+    	attributes.put("transfer student", scholarshipAttributes[4]);
+    	attributes.put("units enrolled", scholarshipAttributes[5]);
+    	attributes.put("gender", scholarshipAttributes[6]);
+    	attributes.put("race", scholarshipAttributes[7]);
     }
 
     public String getName(){
