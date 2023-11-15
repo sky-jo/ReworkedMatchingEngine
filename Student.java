@@ -4,8 +4,7 @@
  * 	        UASAMS. There is a string containing the name and attributes 
  * 			containing information about the student outlined in the 
  * 			requirements. This class acts as a container for data to be
- * 			used by the Match Engine to generate a fit rating.
- * 
+ * 			used by the Match Engine to generate a fit rating. 
  * Setters are not provided as this information should not change with regards
  * to the matching engine. 
  */
@@ -43,8 +42,5 @@ public class Student {
     public HashMap<String, String> getAttributes() {
     	return attributes;
     }
-   
     // END BOILERPLATE
-
-
 }
