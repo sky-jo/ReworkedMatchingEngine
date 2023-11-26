@@ -8,12 +8,12 @@
  * Setters are not provided as this information should not change with regards
  * to the matching engine. 
  */
-import java.util.HashMap;
+
 
 public class Student {
 	
     private String name;
-    private HashMap<String, String> attributes = new HashMap<String, String>(10);
+    private Hashtable<String, String> attributes = new Hashtable<String, String>(10);
     
     /**
      * @param studentName the name of the student
@@ -39,7 +39,7 @@ public class Student {
     public String getName() {
         return name;
     }
-    public HashMap<String, String> getAttributes() {
+    public Hashtable<String, String> getAttributes() {
     	return attributes;
     }
     // END BOILERPLATE
