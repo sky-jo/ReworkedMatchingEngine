@@ -8,12 +8,10 @@
  * Setters are not provided as this information should not change with regards
  * to the matching engine.
  */
-import java.util.HashMap;
-
 public class Scholarship {
     private String name, openDate, dueDate, priorityAttribute;
     private int amount; // potentially unnecessary
-    private HashMap<String, String> attributes = new HashMap<String, String>(10);
+    private Hashtable<String, String> attributes = new Hashtable<String, String>();
     
     /**
      * @param scholarshipName the name of the scholarship
@@ -59,7 +57,7 @@ public class Scholarship {
     	return priorityAttribute;
     }
     
-    public HashMap<String, String> getAttributes() {
+    public Hashtable<String, String> getAttributes() {
     	return attributes;
     }
 
