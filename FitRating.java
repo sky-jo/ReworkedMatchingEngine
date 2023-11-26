@@ -4,8 +4,6 @@
  * 			 a student and a scholarship and determines how well they fit, i.e.
  * 			 how many attributes the students and scholarships share.
  */
-import java.util.HashMap;
-import java.util.Map;
 
 public class FitRating {
 	final private static float MAX_FIT_RATING = (float) 100.0;
@@ -17,8 +15,8 @@ public class FitRating {
 	 * @return returns a float representing how well a student and a scholarship match. A higher fit rating means a better match. 
 	 */
 	public static float generateFitRating(Student student, Scholarship scholarship) {
-		HashMap<String, String> studentAttributes = student.getAttributes();
-		HashMap<String, String> scholarshipAttributes = scholarship.getAttributes();
+		Hashtable<String, String> studentAttributes = student.getAttributes();
+		Hashtable<String, String> scholarshipAttributes = scholarship.getAttributes();
 		String priorityAttribute = scholarship.getPriorityAttribute();
 		
 		
@@ -36,7 +34,7 @@ public class FitRating {
 		float fitRating = 0;
 		float toAdd = attributeValue;
 		// iterate over every attribute in the scholarship and student to check if they match
-		for (Map.Entry<String, String> entry: scholarshipAttributes.entrySet()) {
+		for (Pair<String, String> entry: scholarshipAttributes.entryArray()) {
 			String scholarshipAttribute = entry.getKey();
 			String scholarshipValue = entry.getValue();
 			String studentValue = studentAttributes.get(scholarshipAttribute);
