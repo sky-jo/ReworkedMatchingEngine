@@ -26,7 +26,7 @@ public class Student {
         attributes.put("major", studentAttributes[0]);
     	attributes.put("minor", studentAttributes[1]);
     	attributes.put("graduation year", studentAttributes[2]);
-    	attributes.put("GPA", studentAttributes[3]);
+    	attributes.put("gpa", studentAttributes[3]);
     	attributes.put("year of study", studentAttributes[4]);
     	attributes.put("transfer student", studentAttributes[5]);
     	attributes.put("units enrolled", studentAttributes[6]);

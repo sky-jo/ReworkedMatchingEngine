@@ -20,6 +20,8 @@ public class FitRating {
 		// check for an old scholarship
 		String overDate = scholarship.getDueDate();
 		if (isLate(overDate)) { return -1; }
+		String openDate = scholarship.getOpenDate();
+		if (notOpen(openDate)) { return -1; }
 		
 		
 		Hashtable<String, String> studentAttributes = student.getAttributes();
@@ -60,13 +62,12 @@ public class FitRating {
 			// if checking scholarships desired major, check the students major and minor for a match
 			if (scholarshipAttribute.equals("major")) {
 				// if the students major and minor match, add to the fit rating
-				if (scholarshipValue.equals(studentValue) ||
-					scholarshipValue.equals(studentAttributes.get("minor"))) {
+				if (isMajorMatch(studentValue, studentAttributes.get("minor"), scholarshipValue)) {
 					fitRating += toAdd;
 				}
 			}
 			// if GPA, cast to float then compare
-			else if (scholarshipAttribute.equals("GPA")) {
+			else if (scholarshipAttribute.equals("gpa")) {
 				float scholarshipGPA = Float.parseFloat(scholarshipValue);
 				float studentGPA = Float.parseFloat(studentValue);
 				if (studentGPA >= scholarshipGPA) {
@@ -82,19 +83,20 @@ public class FitRating {
 	}
 	
 	/**
-	 * 
 	 * @param date a string containing the date in the form MM/DD/YYYY
 	 * @return true if the date given is past the current date, false otherwise
 	 */
-	public static boolean isLate(String date) {
+	private static boolean isLate(String date) {
 		// get components of date string
 		String[] dateComponents = date.split("/");
 		String monthStr = dateComponents[0];
 		String dayStr = dateComponents[1];
 		String yearStr = dateComponents[2];
-		
+
 		// get the current date
 		LocalDateTime now = LocalDateTime.now();
+
+		//System.out.println(date + " < " + now.toString());
 		
 		if (now.getYear() > Integer.valueOf(yearStr)) {
 			return true;
@@ -113,4 +115,61 @@ public class FitRating {
 		}
 		return false;
 	}
+
+	/**
+	 * @param date a string represeing the date in the form MM/DD/YY
+	 * @return fasle if the date passed is less than the current date, true if its greater than or equal to
+	 */
+	private static boolean notOpen(String date) {
+		// get components of date string
+		String[] dateComponents = date.split("/");
+		String monthStr = dateComponents[0];
+		String dayStr = dateComponents[1];
+		String yearStr = dateComponents[2];
+		
+		// get the current date
+		LocalDateTime now = LocalDateTime.now();
+
+		// if the current year is >, the shcolarship has been opened
+		if (now.getYear() > Integer.parseInt(yearStr)) {
+			return false;
+		}
+		// if the years are equal, check month, then day
+		else if (now.getYear() == Integer.parseInt(yearStr)) {
+			if (now.getMonthValue() > Integer.parseInt(monthStr)) {
+				return false;
+			}
+			else  if (now.getMonthValue() == Integer.parseInt(monthStr)) {
+				if (now.getDayOfMonth() >= Integer.parseInt(dayStr)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public static boolean isMajorMatch(String studentMajor, String studentMinor, String scholarshipMajor) {
+		studentMajor = studentMajor.toLowerCase();
+		studentMinor = studentMinor.toLowerCase();
+		scholarshipMajor = scholarshipMajor.toLowerCase();
+
+		if (studentMajor.equals(scholarshipMajor) || studentMinor.equals(scholarshipMajor)) {
+			return true;
+		}
+		
+		String[] majorArray = studentMajor.split(" ");
+		String[] minorArray = studentMinor.split(" ");
+
+		for (String majorKeyword : majorArray) {
+			if (majorKeyword.equals(scholarshipMajor)) {
+				return true;
+			}
+		}
+		for (String minorKeyword : minorArray) {
+			if (minorKeyword.equals(scholarshipMajor)) {
+				return true;
+			}
+		}
+		return false;
+	} 
 }

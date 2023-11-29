@@ -1,5 +1,5 @@
 import java.util.Scanner;
-import java.io.*;
+//import java.io.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -16,9 +16,7 @@ public class Reader {
 	static String studentName;
 
 	public static void main(String[] args) throws IOException {
-
 		Scholarship[] listScholarships = new Scholarship[100];
-		int numScholarships = 0;
 		
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter the name of the csv file containg information about the scholarships:");
@@ -30,7 +28,8 @@ public class Reader {
 		
 		// -----------------SCHOLARSHIP READER---------------------------------------
 		// System.out.println("Opening file Scholarships.csv");
-		FileInputStream scholarshipData = new FileInputStream(scholarshipFile);
+		// CSV Files\ScholarshipData1.csv
+		FileInputStream scholarshipData = new FileInputStream("csvs/" + scholarshipFile);
 		Scanner inFs = new Scanner(scholarshipData);
 
 		// Reading the scholarships
@@ -43,12 +42,6 @@ public class Reader {
 			String[] sData = line.split(",");
 			
 			// skip the first line
-			if (i == 0) { i++; continue; }
-
-			// for(int m=0; m <sData.length;m++ ){
-			// System.out.print(sData[m]+",");
-			// }
-			// System.out.println();
 
 			scholarshipName = sData[0];
 			// atributes array: 0-Major&Minor 1-Grad year 2-GPA 3-Year of Study 4-Transfer
@@ -64,8 +57,6 @@ public class Reader {
 			listScholarships[i] = s;
 			i++;
 		}
-		// remove 1 that was added to skip the first line
-		i--;
 		inFs.close();
 		scholarshipData.close();
 
@@ -73,7 +64,7 @@ public class Reader {
 		int j = 0;
 		// ----------STUDENT READER------------------------
 		// System.out.println("Opening file Students.csv");
-		FileInputStream studentData = new FileInputStream(studentFile);
+		FileInputStream studentData = new FileInputStream("csvs/" + studentFile);
 		Scanner inFS = new Scanner(studentData);
 
 		// Reading Students CSV
@@ -84,9 +75,6 @@ public class Reader {
 			String line = inFS.nextLine();
 			String[] stData = line.split(",");
 
-			// skip the first line of the csv file
-			if (j == 0) { j++; continue; }
-
 			studentName = stData[0];
 			String[] Sattributes = { stData[1], stData[2], stData[3], stData[4], stData[5], stData[6], stData[7],
 					stData[8], stData[9] };
@@ -96,8 +84,6 @@ public class Reader {
 			listStudents[j] = stu;
 			j++;
 		}
-		// remove 1 that was added to skip the first line
-		j--;
 		inFS.close();
 		studentData.close();
 		

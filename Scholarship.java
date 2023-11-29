@@ -33,7 +33,7 @@ public class Scholarship {
     	
     	attributes.put("major", scholarshipAttributes[0]);
     	attributes.put("graduation year", scholarshipAttributes[1]);
-    	attributes.put("GPA", scholarshipAttributes[2]);
+    	attributes.put("gpa", scholarshipAttributes[2]);
     	attributes.put("year of study", scholarshipAttributes[3]);
     	attributes.put("transfer student", scholarshipAttributes[4]);
     	attributes.put("units enrolled", scholarshipAttributes[5]);
