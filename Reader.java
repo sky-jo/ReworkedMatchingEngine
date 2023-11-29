@@ -113,8 +113,8 @@ public class Reader {
 				if (scholarship == null || scholarship.getDueDate().equals("duedate")) {
 					continue;
 				}
-				System.out.println("Student: " + student.getName() + " FitRaiting for " + scholarship.getName()
-						+ " Sholarship: " + FitRating.generateFitRating(student, scholarship));
+				System.out.println(student.getName() + " FitRating for " + scholarship.getName()
+                    + " Scholarship: " + FitRating.generateFitRating(student, scholarship));
 			}
 			System.out.println("------------------------------------------------------------------------------");
 		}
