@@ -4,6 +4,7 @@
  * 			 a student and a scholarship and determines how well they fit, i.e.
  * 			 how many attributes the students and scholarships share.
  */
+import java.time.LocalDateTime;
 
 public class FitRating {
 	final private static float MAX_FIT_RATING = (float) 100.0;
@@ -15,11 +16,16 @@ public class FitRating {
 	 * @return returns a float representing how well a student and a scholarship match. A higher fit rating means a better match. 
 	 */
 	public static float generateFitRating(Student student, Scholarship scholarship) {
+		
+		// check for an old scholarship
+		String overDate = scholarship.getDueDate();
+		if (isLate(overDate)) { return -1; }
+		
+		
 		Hashtable<String, String> studentAttributes = student.getAttributes();
 		Hashtable<String, String> scholarshipAttributes = scholarship.getAttributes();
+		
 		String priorityAttribute = scholarship.getPriorityAttribute();
-		
-		
 		// calculate the value of one attribute
 		float attributeValue;
 		// if there is not priority attribute, each attribute has the same value
@@ -73,5 +79,38 @@ public class FitRating {
 			}
 		}
 		return fitRating;
+	}
+	
+	/**
+	 * 
+	 * @param date a string containing the date in the form MM/DD/YYYY
+	 * @return true if the date given is past the current date, false otherwise
+	 */
+	public static boolean isLate(String date) {
+		// get components of date string
+		String[] dateComponents = date.split("/");
+		String monthStr = dateComponents[0];
+		String dayStr = dateComponents[1];
+		String yearStr = dateComponents[2];
+		
+		// get the current date
+		LocalDateTime now = LocalDateTime.now();
+		
+		if (now.getYear() > Integer.valueOf(yearStr)) {
+			return true;
+		}
+		// need to check months if years are the same
+		else if (now.getYear() == Integer.valueOf(yearStr)) {
+			if (now.getMonthValue() > Integer.valueOf(monthStr)) {
+				return true;
+			}
+			// need to check days if months and years are the same
+			else if (now.getMonthValue() == Integer.valueOf(monthStr)) {
+				if (now.getDayOfMonth() > Integer.valueOf(dayStr)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
