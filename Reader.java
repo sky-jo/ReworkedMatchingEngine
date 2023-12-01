@@ -1,120 +1,185 @@
-import java.util.Scanner;
-import java.io.*;
-import java.io.FileInputStream;
-import java.io.IOException;
+/*
+ *	For: SFWE 301 
+ * 	Purpose: This Java class contains the generateFitRating method that takes
+ * 			 a student and a scholarship and determines how well they fit, i.e.
+ * 			 how many attributes the students and scholarships share.
+ */
+import java.time.LocalDateTime;
 
-public class Reader {
+public class FitRating {
+	final private static float MAX_FIT_RATING = (float) 100.0;
+	final private static float PRIORITY_ATTRIBUTE_VALUE = (float) 30.0;
 	
-	
-	public static void main(String[] args) throws IOException {
+	/**
+	 * @param student of type Student with attributes
+	 * @param scholarship of type Scholarship with attributes and other info about the scholarship
+	 * @return returns a float representing how well a student and a scholarship match. A higher fit rating means a better match. 
+	 */
+	public static float generateFitRating(Student student, Scholarship scholarship) {
 		
-		//Scanner sc = new Scanner(System.in);
-		while (true) { 
-				Scanner sc = new Scanner(System.in);
-			Scholarship[] listScholarships = new Scholarship[100];	
-			System.out.print("Enter the name of the csv file containg information about the scholarships:");
-			String scholarshipFile = sc.nextLine();
-			System.out.println();
-			System.out.print("Enter the name of the csv file containg information about the students:");
-			String studentFile = sc.nextLine();
-			System.out.println();
-			//csvs\ScholarshipData1.csv
+		// check for an old scholarship
+		String overDate = scholarship.getDueDate();
+		if (isLate(overDate)) { return -1; }
+		String openDate = scholarship.getOpenDate();
+		if (notOpen(openDate)) { return -1; }
+		
+		
+		Hashtable<String, String> studentAttributes = student.getAttributes();
+		Hashtable<String, String> scholarshipAttributes = scholarship.getAttributes();
+		
+		String priorityAttribute = scholarship.getPriorityAttribute();
+		// calculate the value of one attribute
+		float attributeValue;
+		// if there is not priority attribute, each attribute has the same value
+		if (priorityAttribute.equals("none")) 
+			attributeValue = MAX_FIT_RATING / (float) scholarshipAttributes.size();
+		// if there is a priority attribute, the priority attribute is worth 30 pts
+		// and all other attributes are worth the same
+		else 
+			attributeValue = (float) (MAX_FIT_RATING - PRIORITY_ATTRIBUTE_VALUE) / ((float) scholarshipAttributes.size() - 1);
+		
+		
+		float fitRating = 0;
+		float toAdd = attributeValue;
+		// iterate over every attribute in the scholarship and student to check if they match
+		for (Pair<String, String> entry: scholarshipAttributes.entryArray()) {
+			String scholarshipAttribute = entry.getKey();
+			String scholarshipValue = entry.getValue();
+			String studentValue = studentAttributes.get(scholarshipAttribute);
 			
-			// -----------------SCHOLARSHIP READER---------------------------------------
-			// System.out.println("Opening file Scholarships.csv");
-			FileInputStream scholarshipData = new FileInputStream("csvs/"+scholarshipFile);
-			Scanner inFs = new Scanner(scholarshipData);
-	
-			// Reading the scholarships
-			// Variables for Scholarships
+			// check for priority attribute and set toAdd appropriately
+			// System.out.println(scholarshipAttribute + " == " + priorityAttribute + " is " + scholarshipAttribute.equals(priorityAttribute.trim()));
+			if (scholarshipAttribute.equals(priorityAttribute.trim())) 
+				toAdd = PRIORITY_ATTRIBUTE_VALUE;				
+			else 
+				toAdd = attributeValue;
 			
-			String scholarshipName;
-			String scholarshipOpenDate;
-			String scholarshipDueDate;
-			// int scholarshipAmount;
-			String scholarshipPriority;
-			String amount;
-
-			// VARIABLES FOR STUDENTS
-			String studentName;
-
-	
-			int i = 0;
-			while (inFs.hasNextLine()) {
-				// For each comma, it makes it a slot in the array
-				String line = inFs.nextLine();
-				String[] sData = line.split(",");
-				
-				// skip the first line
-				//if (i == 0) { i++; continue; }
-				scholarshipName = sData[0];
-				
-				// attributes array: 0-Major&Minor 1-graduation year 2-GPA 3-Year of Study 4-Transfer
-				// Student 5-Units Enrolled 6-Gender 7-Race
-				String[] attributes = { sData[1], sData[2], sData[3], sData[4], sData[5], sData[6], sData[7], sData[8] };
-				scholarshipOpenDate = sData[9];
-				scholarshipDueDate = sData[10];
-				scholarshipPriority = sData[11];
-	
-				// Creates scholarship
-				Scholarship s = new Scholarship(scholarshipName, scholarshipOpenDate, scholarshipDueDate,
-						scholarshipPriority, 0, attributes);
-				listScholarships[i] = s;
-				i++;
+			// if the scholarship does not specify a value for an attribute, 
+			// add points to the fit rating
+			if (scholarshipValue.equals("none")) {
+				fitRating += toAdd;
+				continue;
 			}
-			// remove 1 that was added to skip the first line
-			//i--;
-			inFs.close();
-			scholarshipData.close();
-	
-			Student[] listStudents = new Student[100];
-			int j = 0;
-			// ----------STUDENT READER------------------------
-			FileInputStream studentData = new FileInputStream("csvs/"+studentFile);
-			Scanner inFS = new Scanner(studentData);
-	
-			// Reading Students CSV
-			while (inFS.hasNextLine()) {
-				// For each comma, it makes it a slot in the array
-				String line = inFS.nextLine();
-				String[] stData = line.split(",");
-	
-				// skip the first line of the csv file
-				//if (j == 0) { j++; continue; }
-	
-				studentName = stData[0];
-				String[] Sattributes = { stData[1], stData[2], stData[3], stData[4], stData[5], 
-									     stData[6], stData[7], stData[8], stData[9] };
-	
-				// Creates an instance of the Student object
-				Student stu = new Student(studentName, Sattributes);
-				listStudents[j] = stu;
-				j++;
+			// if checking scholarships desired major, check the students major and minor for a match
+			if (scholarshipAttribute.equals("major")) {
+				// if the students major and minor match, add to the fit rating
+				if (isMajorMatch(studentValue, studentAttributes.get("minor"), scholarshipValue)) {
+					fitRating += toAdd;
+				}
 			}
-			// remove 1 that was added to skip the first line
-			//j--;
-			inFS.close();
-			studentData.close();
+			// if GPA, cast to float then compare
+			else if (scholarshipAttribute.equals("gpa")) {
+				float scholarshipGPA = Float.parseFloat(scholarshipValue);
+				float studentGPA = Float.parseFloat(studentValue);
+				if (studentGPA >= scholarshipGPA) {
+					fitRating += toAdd;
+				}
+			}
+			// if units, students units >= scholarship units to get fit rating points
+			else if (scholarshipAttribute.equals("units enrolled")) {
+				int scholarshipUnits = Integer.parseInt(scholarshipValue);
+				int studentUnits = Integer.parseInt(studentValue);
+				if (studentUnits >= scholarshipUnits) {
+					fitRating += toAdd;
+				}
+			}
 			
-			System.out.println("#######################################BEGIN TESTCASE#######################################");
-			for (Student student : listStudents) {
-				if (student == null) {
-					continue;
-				}
-				else {
-					System.out.println("--------running fit rating for " + student.getName() + " on " + i + " scholarships--------");
-				}
-				for (Scholarship scholarship : listScholarships) {
-					if (scholarship == null || scholarship.getDueDate().equals("duedate")) {
-						continue;
-					}
-					System.out.println(student.getName() + " FitRating for " + scholarship.getName()
-	                    + " Scholarship: " + FitRating.generateFitRating(student, scholarship));
-				}
-				System.out.println("------------------------------------------------------------------------------");
+			// only add to the fit rating if attributes match
+			else if (studentValue.equals(scholarshipValue)) {
+				fitRating += toAdd;
 			}
-			System.out.println("##########################################DONE##########################################");
-			System.out.println();
 		}
+		return fitRating;
 	}
+	
+	/**
+	 * @param date a string containing the date in the form MM/DD/YYYY
+	 * @return true if the date given is past the current date, false otherwise
+	 */
+	private static boolean isLate(String date) {
+		// get components of date string
+		String[] dateComponents = date.split("/");
+		String monthStr = dateComponents[0];
+		String dayStr = dateComponents[1];
+		String yearStr = dateComponents[2];
+
+		// get the current date
+		LocalDateTime now = LocalDateTime.now();
+
+		//System.out.println(date + " < " + now.toString());
+		
+		if (now.getYear() > Integer.valueOf(yearStr)) {
+			return true;
+		}
+		// need to check months if years are the same
+		else if (now.getYear() == Integer.valueOf(yearStr)) {
+			if (now.getMonthValue() > Integer.valueOf(monthStr)) {
+				return true;
+			}
+			// need to check days if months and years are the same
+			else if (now.getMonthValue() == Integer.valueOf(monthStr)) {
+				if (now.getDayOfMonth() > Integer.valueOf(dayStr)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param date a string represeing the date in the form MM/DD/YY
+	 * @return fasle if the date passed is less than the current date, true if its greater than or equal to
+	 */
+	private static boolean notOpen(String date) {
+		// get components of date string
+		String[] dateComponents = date.split("/");
+		String monthStr = dateComponents[0];
+		String dayStr = dateComponents[1];
+		String yearStr = dateComponents[2];
+		
+		// get the current date
+		LocalDateTime now = LocalDateTime.now();
+
+		// if the current year is >, the shcolarship has been opened
+		if (now.getYear() > Integer.parseInt(yearStr)) {
+			return false;
+		}
+		// if the years are equal, check month, then day
+		else if (now.getYear() == Integer.parseInt(yearStr)) {
+			if (now.getMonthValue() > Integer.parseInt(monthStr)) {
+				return false;
+			}
+			else  if (now.getMonthValue() == Integer.parseInt(monthStr)) {
+				if (now.getDayOfMonth() >= Integer.parseInt(dayStr)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public static boolean isMajorMatch(String studentMajor, String studentMinor, String scholarshipMajor) {
+		studentMajor = studentMajor.toLowerCase();
+		studentMinor = studentMinor.toLowerCase();
+		scholarshipMajor = scholarshipMajor.toLowerCase();
+
+		if (studentMajor.equals(scholarshipMajor) || studentMinor.equals(scholarshipMajor)) {
+			return true;
+		}
+		
+		String[] majorArray = studentMajor.split(" ");
+		String[] minorArray = studentMinor.split(" ");
+
+		for (String majorKeyword : majorArray) {
+			if (majorKeyword.equals(scholarshipMajor)) {
+				return true;
+			}
+		}
+		for (String minorKeyword : minorArray) {
+			if (minorKeyword.equals(scholarshipMajor)) {
+				return true;
+			}
+		}
+		return false;
+	} 
 }
