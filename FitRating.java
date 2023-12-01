@@ -47,9 +47,6 @@ public class FitRating {
 			String scholarshipValue = entry.getValue();
 			String studentValue = studentAttributes.get(scholarshipAttribute);
 			
-			System.out.println(scholarshipAttribute);
-			System.out.println(scholarshipValue + " -> " + studentValue);
-			
 			// check for priority attribute and set toAdd appropriately
 			// System.out.println(scholarshipAttribute + " == " + priorityAttribute + " is " + scholarshipAttribute.equals(priorityAttribute.trim()));
 			if (scholarshipAttribute.equals(priorityAttribute.trim())) 
@@ -74,7 +71,6 @@ public class FitRating {
 			else if (scholarshipAttribute.equals("gpa")) {
 				float scholarshipGPA = Float.parseFloat(scholarshipValue);
 				float studentGPA = Float.parseFloat(studentValue);
-				System.out.println(scholarshipGPA + " " + studentGPA);
 				if (studentGPA >= scholarshipGPA) {
 					fitRating += toAdd;
 				}
@@ -92,7 +88,6 @@ public class FitRating {
 			else if (studentValue.equals(scholarshipValue)) {
 				fitRating += toAdd;
 			}
-			System.out.println(fitRating);
 		}
 		return fitRating;
 	}
