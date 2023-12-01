@@ -47,6 +47,9 @@ public class FitRating {
 			String scholarshipValue = entry.getValue();
 			String studentValue = studentAttributes.get(scholarshipAttribute);
 			
+			System.out.println(scholarshipAttribute);
+			System.out.println(scholarshipValue + " -> " + studentValue);
+			
 			// check for priority attribute and set toAdd appropriately
 			// System.out.println(scholarshipAttribute + " == " + priorityAttribute + " is " + scholarshipAttribute.equals(priorityAttribute.trim()));
 			if (scholarshipAttribute.equals(priorityAttribute.trim())) 
@@ -54,12 +57,12 @@ public class FitRating {
 			else 
 				toAdd = attributeValue;
 			
-			
 			// if the scholarship does not specify a value for an attribute, 
 			// add points to the fit rating
-			if (scholarshipValue.equals("none"))
+			if (scholarshipValue.equals("none")) {
 				fitRating += toAdd;
-			
+				continue;
+			}
 			// if checking scholarships desired major, check the students major and minor for a match
 			if (scholarshipAttribute.equals("major")) {
 				// if the students major and minor match, add to the fit rating
@@ -71,14 +74,25 @@ public class FitRating {
 			else if (scholarshipAttribute.equals("gpa")) {
 				float scholarshipGPA = Float.parseFloat(scholarshipValue);
 				float studentGPA = Float.parseFloat(studentValue);
+				System.out.println(scholarshipGPA + " " + studentGPA);
 				if (studentGPA >= scholarshipGPA) {
 					fitRating += toAdd;
 				}
 			}
+			// if units, students units >= scholarship units to get fit rating points
+			else if (scholarshipAttribute.equals("units enrolled")) {
+				int scholarshipUnits = Integer.parseInt(scholarshipValue);
+				int studentUnits = Integer.parseInt(studentValue);
+				if (studentUnits >= scholarshipUnits) {
+					fitRating += toAdd;
+				}
+			}
+			
 			// only add to the fit rating if attributes match
 			else if (studentValue.equals(scholarshipValue)) {
 				fitRating += toAdd;
 			}
+			System.out.println(fitRating);
 		}
 		return fitRating;
 	}
