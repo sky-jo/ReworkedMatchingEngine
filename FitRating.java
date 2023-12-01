@@ -36,7 +36,7 @@ public class FitRating {
 		// if there is a priority attribute, the priority attribute is worth 30 pts
 		// and all other attributes are worth the same
 		else 
-			attributeValue = (float) (MAX_FIT_RATING - PRIORITY_ATTRIBUTE_VALUE) / (float) scholarshipAttributes.size();
+			attributeValue = (float) (MAX_FIT_RATING - PRIORITY_ATTRIBUTE_VALUE) / ((float) scholarshipAttributes.size() - 1);
 		
 		
 		float fitRating = 0;
@@ -48,7 +48,8 @@ public class FitRating {
 			String studentValue = studentAttributes.get(scholarshipAttribute);
 			
 			// check for priority attribute and set toAdd appropriately
-			if (scholarshipAttribute.equals(priorityAttribute)) 
+			// System.out.println(scholarshipAttribute + " == " + priorityAttribute + " is " + scholarshipAttribute.equals(priorityAttribute.trim()));
+			if (scholarshipAttribute.equals(priorityAttribute.trim())) 
 				toAdd = PRIORITY_ATTRIBUTE_VALUE;				
 			else 
 				toAdd = attributeValue;
