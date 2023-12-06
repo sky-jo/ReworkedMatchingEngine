@@ -46,7 +46,7 @@ public class FitRating {
 			String scholarshipAttribute = entry.getKey();
 			String scholarshipValue = entry.getValue();
 			String studentValue = studentAttributes.get(scholarshipAttribute);
-			
+			// System.out.print("scholarship: " + scholarshipValue + ", student: " + studentValue + " -> ");
 			// check for priority attribute and set toAdd appropriately
 			// System.out.println(scholarshipAttribute + " == " + priorityAttribute + " is " + scholarshipAttribute.equals(priorityAttribute.trim()));
 			if (scholarshipAttribute.equals(priorityAttribute.trim())) 
@@ -58,6 +58,7 @@ public class FitRating {
 			// add points to the fit rating
 			if (scholarshipValue.equals("none")) {
 				fitRating += toAdd;
+				// System.out.println(fitRating);
 				continue;
 			}
 			// if checking scholarships desired major, check the students major and minor for a match
@@ -88,6 +89,7 @@ public class FitRating {
 			else if (studentValue.equals(scholarshipValue)) {
 				fitRating += toAdd;
 			}
+			// System.out.println(fitRating);
 		}
 		return fitRating;
 	}
