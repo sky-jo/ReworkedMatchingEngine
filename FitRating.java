@@ -58,7 +58,6 @@ public class FitRating {
 			// add points to the fit rating
 			if (scholarshipValue.equals("none")) {
 				fitRating += toAdd;
-				// System.out.println(fitRating);
 				continue;
 			}
 			// if checking scholarships desired major, check the students major and minor for a match
@@ -89,7 +88,7 @@ public class FitRating {
 			else if (studentValue.equals(scholarshipValue)) {
 				fitRating += toAdd;
 			}
-			// System.out.println(fitRating);
+		
 		}
 		return fitRating;
 	}
@@ -107,8 +106,6 @@ public class FitRating {
 
 		// get the current date
 		LocalDateTime now = LocalDateTime.now();
-
-		//System.out.println(date + " < " + now.toString());
 		
 		if (now.getYear() > Integer.valueOf(yearStr)) {
 			return true;

@@ -29,7 +29,7 @@ public class Scholarship {
     	openDate = scholarshipOpenDate;
     	dueDate = scholarshipDueDate;
     	priorityAttribute = scholarshipPriorityAttribute;
-    	//amount = scholarshipAmount;
+    	
     	
     	attributes.put("major", scholarshipAttributes[0]);
     	attributes.put("graduation year", scholarshipAttributes[1]);
