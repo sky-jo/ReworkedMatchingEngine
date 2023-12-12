@@ -35,12 +35,10 @@ public class Student {
     }
 
     // all getters and setters required for both the Scholarship class and the Student class
-    // BOILERPLATE BEGINS - this is why i hate java
     public String getName() {
         return name;
     }
     public Hashtable<String, String> getAttributes() {
     	return attributes;
     }
-    // END BOILERPLATE
 }
